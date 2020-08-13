@@ -1,10 +1,6 @@
 const express = require("express");
 const router = express.Router();
-// const app = require('../../app')
-// const bodyParser = require("body-parser");
 const Nexmo = require("nexmo");
-const socketio = require("socket.io");
-
 
 const nexmo = new Nexmo(
   {
@@ -17,22 +13,10 @@ const nexmo = new Nexmo(
 
 
 
-
-router.get("/signup", (req, res, next) => {
-  res.status(200).json({
-    message: `YOU HIT THE GET REQUEST SIGN UP ROUTE`,
-  });
-});
-
-
-
-
-router.post("/signup", (req, res, next) => {
+router.post("/", (req, res, next) => {
   const from = "12602638453";
   const number = req.body.phoneNumber;
   const text = req.body.message;
-
-  // res.end(JSON.stringify(req.body));
 
   nexmo.message.sendSms(from,number,text, {type: "unicode"}, (err, responseData) => {
       if (err) {
@@ -54,8 +38,5 @@ router.post("/signup", (req, res, next) => {
     });
 });
 
-// Sign up
-
-// New List Num  &  Lvl
 
 module.exports = router;
