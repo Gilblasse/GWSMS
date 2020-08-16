@@ -11,6 +11,39 @@ const nexmo = new Nexmo(
 );
 
 
+router.post("/investors", (req, res, next) => {
+  const from = "12602638453";
+  const investors = req.body.data.investors;
+  const text = req.body.data.message;
+  var interval = 10 * 1000; // 10 seconds;
+
+
+  for (var i = 0; i <=investors.length-1; i++) {
+    
+    setTimeout( function (i) {
+      
+      nexmo.message.sendSms(from,investors[i].phoneNumber,text, {type: "unicode"}, (err, responseData) => {
+        if (err) {
+          console.log(err);
+        } else {
+          if (responseData.messages[0]["status"] === "0") {
+            console.log("Message sent successfully.");
+          } else {
+            console.log(
+              `Message failed with error: ${responseData.messages[0]["error-text"]}`
+            );
+          }
+        }
+      });
+
+    }, interval * i, i);
+
+  }
+
+});
+
+
+
 
 
 router.post("/", (req, res, next) => {
@@ -33,9 +66,6 @@ router.post("/", (req, res, next) => {
     }
   );
 
-    res.status(200).json({
-      message: `Sent SMS Message to ${number}`,
-    });
 });
 
 
